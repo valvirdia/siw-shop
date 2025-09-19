@@ -2,6 +2,7 @@ package it.uniroma3.siw.siwshop.model; // <-- QUESTA RIGA È FONDAMENTALE
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 public class Comment {
@@ -32,7 +33,6 @@ public class Comment {
         this.creationTimestamp = LocalDateTime.now();
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -63,5 +63,17 @@ public class Comment {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Comment comment = (Comment) o;
+        return Objects.equals(id, comment.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

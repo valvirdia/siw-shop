@@ -4,6 +4,7 @@ import it.uniroma3.siw.siwshop.model.ProductType;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set; // È buona norma usare Set per le relazioni ManyToMany per evitare duplicati
 
 @Entity
@@ -34,7 +35,6 @@ public class Product {
     )
     private Set<Product> similarProducts; // Questo era il campo mancante
 
-    // Getters and Setters
 
     public Long getId() {
         return id;
@@ -90,5 +90,17 @@ public class Product {
 
     public void setSimilarProducts(Set<Product> similarProducts) {
         this.similarProducts = similarProducts;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

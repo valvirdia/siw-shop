@@ -2,6 +2,7 @@ package it.uniroma3.siw.siwshop.model; // <-- E ANCHE QUI
 
 import jakarta.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class ProductType {
@@ -16,7 +17,6 @@ public class ProductType {
     @OneToMany(mappedBy = "productType")
     private List<Product> products;
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -39,5 +39,17 @@ public class ProductType {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductType that = (ProductType) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
