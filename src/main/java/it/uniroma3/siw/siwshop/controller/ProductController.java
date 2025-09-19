@@ -6,7 +6,9 @@ import it.uniroma3.siw.siwshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class ProductController {
@@ -29,7 +31,7 @@ public class ProductController {
         return "product";
     }
 
-    @GetMapping("/addPrduct")
+    @GetMapping("/products/new")
     public String getAddProduct(Model model) {
         model.addAttribute("product", new Product());
         return "formAddProduct";
@@ -38,6 +40,12 @@ public class ProductController {
     @GetMapping("/home")
     public String home(Model model){
         return "home";
+    }
+
+    @PostMapping("/products/add")
+    public String addProduct(@ModelAttribute("product") Product product) {
+        productService.save(product);
+        return "redirect:/products";
     }
 
 }

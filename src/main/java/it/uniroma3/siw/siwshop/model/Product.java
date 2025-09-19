@@ -26,14 +26,13 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
-    // L'annotazione va qui, associata al campo
     @ManyToMany
     @JoinTable(
             name = "product_similarities",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "similar_product_id")
     )
-    private Set<Product> similarProducts; // Questo era il campo mancante
+    private Set<Product> similarProducts;
 
 
     public Long getId() {

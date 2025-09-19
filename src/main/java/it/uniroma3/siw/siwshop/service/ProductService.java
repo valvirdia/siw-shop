@@ -20,4 +20,8 @@ public class ProductService {
         return productRepository.findById(id).orElse(null);
     }
 
+    @Transactional
+    public Product save(Product product) {
+        return productRepository.save(product);
+    }
 }
