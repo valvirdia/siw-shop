@@ -2,20 +2,47 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Aggiunta nuovo prodotto</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/formAddProduct.css}" />
 </head>
 <body>
-<h1>Aggiungi prodotto</h1>
+<div class="form-wrapper">
+    <h1>Aggiungi un nuovo prodotto</h1>
+    <p class="subtitle">Compila i campi qui sotto per aggiungere un nuovo prodotto al tuo shop.</p>
 
-<form th:action="@{/products/add}" th:object="${product}" method="POST">
-    <p>
-        Nome prodotto: <input type="text" th:field="*{name}"/>
-    </p>
-    <p>
-        Prezzo: <input type="number" step="0.01" th:field="*{price}"/>
-    </p>
-    <p>
-        <button type="submit">Conferma</button>
-    </p>
-</form>
+    <form th:action="@{/products/add}" th:object="${product}" method="POST" enctype="multipart/form-data">
+
+        <div class="input-group">
+            <label for="name">Nome prodotto</label>
+            <input type="text" id="name" th:field="*{name}" placeholder="Inserisci nome prodotto.." required />
+        </div>
+
+        <div class="input-group price-field">
+            <label for="price">Prezzo</label>
+            <div class="price-input">
+                <span class="currency">€</span>
+                <input type="number" step="0.01" id="price" th:field="*{price}" placeholder="0.00" required />
+                <span class="currency">EUR</span>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="description">Descrizione prodotto</label>
+            <textarea id="description" th:field="*{description}" rows="4" placeholder="Descrivi il prodotto in dettaglio..." required></textarea>
+        </div>
+
+
+        <div class="input-group">
+            <label for="categoryName">Categoria Prodotto</label>
+            <input type="text" id="categoryName" name="categoryName" placeholder="Es. Cancelleria, Abbigliamento..." required />
+        </div>
+
+        <div class="input-group">
+            <label for="productImage">Immagine prodotto</label>
+            <input type="file" id="productImage" name="productImage" accept="image/png, image/jpeg" required />
+        </div>
+
+        <button type="submit">Conferma Prodotto</button>
+    </form>
+</div>
 </body>
 </html>

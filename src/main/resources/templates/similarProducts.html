@@ -1,10 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Prodotti Simili</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/similarProducts.css}" />
 </head>
 <body>
+
+<div class="container">
+    <h1>Prodotti simili a: <span th:text="${originalProduct.name}">Nome Prodotto</span></h1>
+    <p class="category-text">Categoria: <strong th:text="${originalProduct.productType.name}">Categoria</strong></p>
+
+    <!-- Messaggio per quando non ci sono altri prodotti nella categoria -->
+    <div th:if="${similarProducts.size() <= 1 and similarProducts.contains(originalProduct)}">
+        <p>Non ci sono altri prodotti in questa categoria.</p>
+    </div>
+
+    <!--  Elenco dei prodotti -->
+    <div class="product-list" th:unless="${similarProducts.isEmpty()}">
+        <!-- Wrapper per ogni prodotto-->
+        <div class="product-wrapper" th:each="similar : ${similarProducts}">
+
+            <!-- Link al prodotto -->
+            <a class="product-link" th:href="@{/products/{id}(id=${similar.id})}" th:text="${similar.name}">
+                Nome Prodotto Simile
+            </a>
+
+            <!-- Pulsante di cancellazione per ADMIN -->
+            <div sec:authorize="hasAuthority('ADMIN')" class="admin-actions">
+                <form th:action="@{/products/delete/{id}(id=${similar.id})}" method="post"
+                      onsubmit="return confirm('Sei sicuro di voler eliminare questo prodotto? Questa azione è irreversibile.');">
+
+                    <input type="hidden" name="originalProductId" th:value="${originalProduct.id}" />
+
+                    <button type="submit" class="delete-button">Elimina</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="back-links">
+        <a th:href="@{/products/{id}(id=${originalProduct.id})}">Torna al prodotto</a>
+        <a th:href="@{/}">Torna alla Home</a>
+    </div>
+</div>
 
 </body>
 </html>

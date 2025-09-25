@@ -21,7 +21,7 @@ import java.security.Principal;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/profile") //Per raggruppare tutti gli endpoint relativi al profilo
+@RequestMapping("/profile")
 public class UserController {
 
     @Autowired

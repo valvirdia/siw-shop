@@ -1,10 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
+<div>
+    <h1>Completa il login per accedere.</h1>
 
+    <!-- Form di login -->
+    <form th:action="@{/login}" method="post">
+        <input type="text" id="username" name="username" placeholder="Inserisci username" required>
+        <input type="password" id="password" name="password" placeholder="Inserisci password" required>
+
+        <!-- Messaggio di errore -->
+        <div th:if="${param.error}">
+            <p style="color:red; font-size: 0.9rem;">Credenziali non valide. Riprova.</p>
+        </div>
+
+        <!-- Logout riuscito -->
+        <div th:if="${param.logout}">
+            <p style="color:green; font-size: 0.9rem;">Logout effettuato con successo.</p>
+        </div>
+
+        <button type="submit">Log in</button>
+    </form>
+
+    <a class="signup-link" th:href="@{/register}">Registrati</a>
+</div>
 </body>
 </html>

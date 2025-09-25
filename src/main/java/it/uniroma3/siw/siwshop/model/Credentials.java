@@ -1,9 +1,16 @@
 package it.uniroma3.siw.siwshop.model;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity
-public class Credentials {
+public class Credentials implements UserDetails {
+
     public static final String ADMIN_ROLE = "ADMIN";
     public static final String DEFAULT_ROLE = "DEFAULT";
 
@@ -21,6 +28,32 @@ public class Credentials {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Questo metodo fornisce i ruoli dell'utente a Spring Security
+        return Collections.singleton(new SimpleGrantedAuthority(this.role));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
     public Long getId() {
         return id;

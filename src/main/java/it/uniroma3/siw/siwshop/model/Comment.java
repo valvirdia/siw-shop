@@ -16,14 +16,10 @@ public class Comment {
 
     private LocalDateTime creationTimestamp;
 
-    /*
-    // Molti commenti possono essere scritti da un solo utente
     @ManyToOne
     @JoinColumn(name = "author_id")
     private User author;
-    */
 
-    // Molti commenti possono riferirsi a un solo prodotto
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
@@ -64,6 +60,15 @@ public class Comment {
     public void setProduct(Product product) {
         this.product = product;
     }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
 
     @Override
     public boolean equals(Object o) {

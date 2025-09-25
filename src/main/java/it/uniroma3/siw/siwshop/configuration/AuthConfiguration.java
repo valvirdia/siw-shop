@@ -21,24 +21,28 @@ public class AuthConfiguration {
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
-                // AUTORIZZAZIONE
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/", "/index", "/register", "/login", "/css/**", "/images/**", "/favicon.ico", "/product-photo/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/register", "/login").permitAll()
+                        // Regole per l'amministratore
                         .requestMatchers(HttpMethod.GET, "/admin/**", "/formAddProduct").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/products/edit/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/products/delete/**").hasAuthority("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/comments/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 // LOGIN
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
-                        .defaultSuccessUrl("/success", true)
+                        .defaultSuccessUrl("/", true)
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
-                // LOGOUT (versione moderna e sicura)
+                // LOGOUT
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/") // Reindirizza alla home dopo il logout
+                        .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .clearAuthentication(true)

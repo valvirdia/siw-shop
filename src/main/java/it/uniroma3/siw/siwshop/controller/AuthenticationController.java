@@ -4,8 +4,6 @@ import it.uniroma3.siw.siwshop.model.Credentials;
 import it.uniroma3.siw.siwshop.model.User;
 import it.uniroma3.siw.siwshop.service.CredentialsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,16 +15,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class AuthenticationController {
     @Autowired
     private CredentialsService credentialsService;
-    @Autowired private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping("/login")
     public String showLoginForm() {
         return "login";
     }
 
-    @PostMapping("/login")
-    public String login() {
-        return "redirect:/success";
-    }
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
@@ -42,11 +38,5 @@ public class AuthenticationController {
         credentials.setPassword(passwordEncoder.encode(credentials.getPassword()));
         credentialsService.save(credentials);
         return "redirect:/login";
-    }
-
-    @GetMapping("/success")
-    public String successRedirect() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return "redirect:/home";
     }
 }

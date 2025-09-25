@@ -1,10 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Shop-Online - Home</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
 </head>
 <body>
-    <a th:href="@{/products/new}">Aggiungi Musica</a>
+
+
+<div class="navbar">
+    <a class="navbar-brand">Shop-Online</a>
+
+    <!-- Contenitore per gli elementi a destra della navbar -->
+    <div class="navbar-right">
+        <!-- visibile solo se l'utente se ADMIN -->
+        <div sec:authorize="hasAuthority('ADMIN')">
+            <a th:href="@{/formAddProduct}" class="nav-link">Aggiungi Prodotto</a>
+        </div>
+
+        <div sec:authorize="isAuthenticated()" class="profile-icon-container">
+            <a th:href="@{/profile}" title="Profilo Utente">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#fff" viewBox="0 0 24 24">
+                    <path d="M12 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 12c-4.418 0-8 2.239-8 5v3h16v-3c0-2.761-3.582-5-8-5z"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <h1>Benvenuto nel nostro Shop!</h1>
+    <p>Usa la barra di ricerca per trovare i prodotti che ti interessano.</p>
+
+    <!-- Barra di ricerca per i prodotti -->
+    <div class="search-container">
+        <form th:action="@{/}" method="get">
+            <input type="text" name="keyword" placeholder="Cerca per nome..." th:value="${keyword}">
+            <button type="submit">Cerca</button>
+        </form>
+    </div>
+</div>
+
+<!-- Sezione dei risultati (visibile solo dopo una ricerca) -->
+<div class="results-container">
+    <div th:if="${products != null}">
+        <h2>Risultati della Ricerca</h2>
+
+        <div th:if="${searchError}" class="error-message">
+            <p th:text="${searchError}"></p>
+        </div>
+
+        <!-- Lista dei prodotti trovati -->
+        <div th:unless="${products.isEmpty()}">
+            <ul>
+                <li th:each="product : ${products}">
+                    <a th:href="@{/products/{id}(id=${product.id})}" th:text="${product.name}">Nome Prodotto</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

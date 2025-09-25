@@ -10,6 +10,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/product-photo/**")
-                .addResourceLocations("file:C:/Users/vvbla/Desktop/uploads/product-photo/");
+                .addResourceLocations("file:C:/Users/vvbla/Desktop/uploads2/product-photo/");
     }
 }

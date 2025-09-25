@@ -1,4 +1,4 @@
-package it.uniroma3.siw.siwshop.model; // <-- E ANCHE QUI
+package it.uniroma3.siw.siwshop.model;
 
 import jakarta.persistence.*;
 import java.util.List;

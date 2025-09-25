@@ -1,0 +1,160 @@
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+.navbar {
+    background-color: #2c3e50;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 25px; /* Spazio tra "Aggiungi Prodotto" e l'icona profilo */
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 1em;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.profile-icon-container a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #ff6600;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.profile-icon-container a:hover {
+    transform: scale(1.1);
+}
+
+/* Stile contenitore principale */
+.container {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.container h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.container p {
+    font-size: 1.2em;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+/* Stile barra di ricerca */
+.search-container {
+    margin: 20px 0;
+}
+
+.search-container input[type="text"] {
+    padding: 12px 20px;
+    width: 50%;
+    max-width: 500px;
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    font-size: 1em;
+    outline: none; /* Rimuove il bordo blu al focus */
+    transition: box-shadow 0.3s;
+}
+
+.search-container input[type="text"]:focus {
+    box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.2);
+    border-color: #ff944d;
+}
+
+.search-container button {
+    padding: 12px 25px;
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    margin-left: -45px; /* Sovrappone leggermente il pulsante all'input */
+    transition: background-color 0.3s;
+}
+
+.search-container button:hover {
+    background-color: #e65c00;
+}
+
+.results-container {
+    max-width: 550px;
+    margin: 20px auto;
+    padding: 0px;
+    text-align: left;
+}
+
+.results-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.results-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.results-container li {
+    background-color: white;
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.results-container li:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.results-container a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.error-message {
+    text-align: center;
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 15px;
+    border-radius: 8px;
+}

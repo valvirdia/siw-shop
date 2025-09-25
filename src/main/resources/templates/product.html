@@ -1,10 +1,145 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${product.name}">Dettaglio Prodotto</title>
+
+    <!-- Importazione del font "Inter" da Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/product.css}" />
 </head>
 <body>
+
+<div class="page-container">
+
+    <a th:href="@{/}" class="home-link-top-right">Torna alla Home</a>
+
+    <!-- La Card che contiene il prodotto -->
+    <div class="product-card">
+        <div th:object="${product}">
+            <div class="product-layout-container">
+                <!-- Colonna di sinistra: immagine del prodotto -->
+                <div class="product-image-column">
+                    <div>
+                        <img th:if="*{imageUrl}" th:src="@{/product-photo/{imageName}(imageName=*{imageUrl})}" th:alt="*{name}">
+                        <div th:unless="*{imageUrl}" class="no-image"><p>Nessuna immagine</p></div>
+                    </div>
+                </div>
+
+                <!-- Colonna di destra: nome, prezzo e descrizione -->
+                <div class="product-info-column">
+                    <h1 th:text="*{name}">Nome del Prodotto</h1>
+                    <p class="product-price"><span th:text="'€ ' + ${#numbers.formatDecimal(product.price, 1, 2, 'COMMA')}">€ 0,00</span></p>
+
+                    <div class="product-description">
+                        <div id="description-display-block">
+                            <p><strong>Descrizione:</strong> <span th:text="*{description}">Descrizione...</span></p>
+                            <div sec:authorize="hasAuthority('ADMIN')">
+                                <button class="btn-secondary" onclick="toggleDescriptionEditMode(true)">Modifica</button>
+                            </div>
+                        </div>
+                        <form id="description-edit-form" th:action="@{/products/edit/{id}(id=*{id})}" method="post" style="display:none;">
+                            <h4>Modifica Descrizione:</h4>
+                            <textarea name="description" rows="5" required th:text="*{description}"></textarea>
+                            <br>
+                            <button type="submit" class="btn-primary">Salva</button>
+                            <button type="button" class="btn-secondary" onclick="toggleDescriptionEditMode(false)">Annulla</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${product.productType != null}" class="similar-products-link">
+        <a th:href="@{/products/{id}/similar(id=${product.id})}" class="button-like">
+            Mostra prodotti simili
+        </a>
+    </div>
+
+    <div class="comments-section">
+        <h2>Commenti</h2>
+
+        <div sec:authorize="isAuthenticated()">
+            <!-- L'utente ha già commentato -->
+            <div th:if="${currentUserComment != null}">
+                <h4>Il tuo commento</h4>
+                <div id="comment-display-block" class="comment-block user-comment-block">
+                    <p class="comment-author">
+                        <strong><span th:text="${currentUserComment.author.name}">Tu</span></strong>
+                    </p>
+                    <blockquote th:text="${currentUserComment.text}"></blockquote>
+                    <div class="comment-actions">
+                        <button class="btn-secondary" onclick="toggleEditMode(true)">Modifica</button>
+                        <form th:action="@{/comments/delete/{id}(id=${currentUserComment.id})}" method="post" onsubmit="return confirm('Sei sicuro di voler eliminare questo commento?');">
+                            <button type="submit" class="delete-button">Elimina</button>
+                        </form>
+                    </div>
+                </div>
+                <form id="comment-edit-form" th:action="@{/comments/edit/{id}(id=${currentUserComment.id})}" method="post" style="display:none;">
+                    <textarea name="commentText" rows="4" required th:text="${currentUserComment.text}"></textarea>
+                    <br>
+                    <button type="submit" class="btn-primary">Salva Modifiche</button>
+                    <button type="button" class="btn-secondary" onclick="toggleEditMode(false)">Annulla</button>
+                </form>
+            </div>
+
+            <!-- L'utente non ha ancora commentato -->
+            <div th:if="${currentUserComment == null}" class="add-comment-form">
+                <h4>Lascia un commento:</h4>
+                <form th:action="@{/comments/add/{productId}(productId=${product.id})}" method="post">
+                    <textarea name="commentText" rows="4" placeholder="Scrivi qui il tuo commento..." required></textarea>
+                    <br>
+                    <button type="submit" class="btn-primary">Invia Commento</button>
+                </form>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- SEZIONE PER I COMMENTI DEGLI ALTRI UTENTI -->
+        <h4>Commenti degli altri utenti:</h4>
+        <div th:if="${product.comments.isEmpty() or (product.comments.size() == 1 and currentUserComment != null)}">
+            <p>Non ci sono ancora commenti da altri utenti.</p>
+        </div>
+        <div th:each="comment : ${product.comments}" th:if="${currentUserComment == null or !comment.id.equals(currentUserComment.id)}" class="comment-block">
+            <p class="comment-author">
+                <strong><span th:text="${comment.author?.name}">Nome Autore</span></strong>
+            </p>
+            <blockquote th:text="${comment.text}"></blockquote>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    function toggleEditMode(isEditing) {
+        const displayBlock = document.getElementById('comment-display-block');
+        const editForm = document.getElementById('comment-edit-form');
+        if (isEditing) {
+            displayBlock.style.display = 'none';
+            editForm.style.display = 'block';
+        } else {
+            displayBlock.style.display = 'block';
+            editForm.style.display = 'none';
+        }
+    }
+    function toggleDescriptionEditMode(isEditing) {
+        const displayBlock = document.getElementById('description-display-block');
+        const editForm = document.getElementById('description-edit-form');
+        if (isEditing) {
+            displayBlock.style.display = 'none';
+            editForm.style.display = 'block';
+        } else {
+            displayBlock.style.display = 'block';
+            editForm.style.display = 'none';
+        }
+    }
+</script>
 
 </body>
 </html>

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set; // È buona norma usare Set per le relazioni ManyToMany per evitare duplicati
+import java.util.Set;
 
 @Entity
 public class Product {
@@ -19,6 +19,8 @@ public class Product {
     private String description;
 
     private Double price;
+
+    private String imageUrl;
 
     @ManyToOne
     private ProductType productType;
@@ -65,6 +67,14 @@ public class Product {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public ProductType getProductType() {
